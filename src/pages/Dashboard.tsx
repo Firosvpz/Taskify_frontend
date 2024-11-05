@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button, Card, Badge, InputGroup, Modal, ListGroup } from "react-bootstrap";
-import { getTasks, createTasks, updateTasks, deleteTasks } from "../api/taskApi";
+import { getTasks, createTasks, updateTasks, deleteTasks, completeTasks } from "../api/taskApi";
 import { FaPlus, FaSearch, FaFilter, FaEdit, FaTrash, FaSpinner, FaTasks, FaCheckCircle, FaClock, FaCheck, FaSignOutAlt } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { useForm, SubmitHandler } from 'react-hook-form';
 import styled from 'styled-components';
-import { PieChart, Pie, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import { userLogout } from "../api/authApi";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -181,12 +181,19 @@ const Dashboard: React.FC = () => {
             );
         });
 
+        socket.on('taskCompleted', (completedTask: ITask) => {
+            setTasks((prev) =>
+                prev.map((task) => (task._id === completedTask._id ? completedTask : task))
+            );
+        });
+
         fetchTasks();
 
         return () => {
             socket.off('taskCreated');
             socket.off('taskUpdated');
             socket.off('taskDeleted');
+            socket.off('taskCompleted');
             disconnectSocket();
         };
     }, []);
@@ -240,9 +247,12 @@ const Dashboard: React.FC = () => {
     };
 
     const handleEditTask = (task: ITask) => {
+        if (task.status === "completed") {
+            toast.error("Completed tasks cannot be edited.");
+            return;
+        }
         setCurrentTask(task);
         setValue("title", task.title);
-        setValue("status", task.status);
         setShowEditModal(true);
     };
 
@@ -254,11 +264,11 @@ const Dashboard: React.FC = () => {
     const handleCompleteTask = async (task: ITask) => {
         try {
             setLoading(true);
-            const response = await updateTasks(task._id, task.title, "completed");
+            const response = await completeTasks(task._id);
             if (response?.success) {
                 toast.success('Task completed successfully');
                 const socket = getSocket();
-                socket.emit('updateTask', response.task);
+                socket.emit('taskUpdated', response.task);
             } else {
                 toast.error('Error while completing task');
             }
@@ -274,7 +284,7 @@ const Dashboard: React.FC = () => {
         if (!currentTask) return;
         try {
             setLoading(true);
-            const response = await updateTasks(currentTask._id, data.title, data.status);
+            const response = await updateTasks(currentTask._id, data.title, currentTask.status);
             if (response?.success) {
                 toast.success('Task updated successfully');
                 const socket = getSocket();
@@ -332,7 +342,7 @@ const Dashboard: React.FC = () => {
         { name: 'Completed', value: completedTasks.length },
     ];
 
-    // const COLORS = ['#FFA500', '#00C49F'];
+    const COLORS = ['#FFA500', '#00C49F'];
 
     return (
         <StyledContainer fluid>
@@ -365,9 +375,9 @@ const Dashboard: React.FC = () => {
                                                         dataKey="value"
                                                         label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                                                     >
-                                                        {/* {pieChartData.map((entry, index) => (
+                                                        {pieChartData.map((_, index) => (
                                                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                                        ))} */}
+                                                        ))}
                                                     </Pie>
                                                 </PieChart>
                                             </ResponsiveContainer>
@@ -403,6 +413,7 @@ const Dashboard: React.FC = () => {
                                         isInvalid={!!errors.title}
                                     />
                                     <StyledButton type="submit" variant="primary" disabled={loading}>
+                                        
                                         {loading ? <FaSpinner className="fa-spin" /> : <><FaPlus /> Add Task</>}
                                     </StyledButton>
                                 </StyledInputGroup>
@@ -472,7 +483,13 @@ const Dashboard: React.FC = () => {
                                                         <FaCheck />
                                                     </StyledButton>
                                                 )}
-                                                <StyledButton variant="outline-primary" size="sm" className="me-2" onClick={() => handleEditTask(task)}>
+                                                <StyledButton 
+                                                    variant="outline-primary" 
+                                                    size="sm" 
+                                                    className="me-2" 
+                                                    onClick={() => handleEditTask(task)}
+                                                    disabled={task.status === "completed"}
+                                                >
                                                     <FaEdit />
                                                 </StyledButton>
                                                 <StyledButton variant="outline-danger" size="sm" onClick={() => handleDeleteTask(task)}>
@@ -503,13 +520,6 @@ const Dashboard: React.FC = () => {
                                 isInvalid={!!errors.title}
                             />
                             {errors.title && <Form.Text className="text-danger">{errors.title.message}</Form.Text>}
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Status</Form.Label>
-                            <Form.Select {...register("status")}>
-                                <option value="pending">Pending</option>
-                                <option value="completed">Completed</option>
-                            </Form.Select>
                         </Form.Group>
                         <StyledButton variant="primary" type="submit" disabled={loading}>
                             {loading ? <FaSpinner className="fa-spin" /> : 'Save Changes'}
