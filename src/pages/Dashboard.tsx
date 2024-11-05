@@ -5,7 +5,7 @@ import { FaPlus, FaSearch, FaFilter, FaEdit, FaTrash, FaSpinner, FaTasks, FaChec
 import toast from "react-hot-toast";
 import { useForm, SubmitHandler } from 'react-hook-form';
 import styled from 'styled-components';
-import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import { userLogout } from "../api/authApi";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -332,7 +332,7 @@ const Dashboard: React.FC = () => {
         { name: 'Completed', value: completedTasks.length },
     ];
 
-    const COLORS = ['#FFA500', '#00C49F'];
+    // const COLORS = ['#FFA500', '#00C49F'];
 
     return (
         <StyledContainer fluid>
@@ -365,9 +365,9 @@ const Dashboard: React.FC = () => {
                                                         dataKey="value"
                                                         label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                                                     >
-                                                        {pieChartData.map((entry, index) => (
+                                                        {/* {pieChartData.map((entry, index) => (
                                                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                                        ))}
+                                                        ))} */}
                                                     </Pie>
                                                 </PieChart>
                                             </ResponsiveContainer>
