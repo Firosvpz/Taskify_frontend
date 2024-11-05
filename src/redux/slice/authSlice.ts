@@ -1,26 +1,26 @@
-// import { createSlice } from "@reduxjs/toolkit";
-// import Cookies from "js-cookie";
+import { createSlice } from "@reduxjs/toolkit";
 
-// const userData = Cookies.get("userInfo")
+const userData = localStorage.getItem("userInfo");
 
-// const initialState = {
-//     userInfo: userData ? JSON.parse(userData) : null,
-// };
+const initialState = {
+    userInfo: userData ? JSON.parse(userData) : null,
+    tasks: [],
+};
 
-// const userSlice = createSlice({
-//     name: 'user',
-//     initialState,
-//     reducers: {
-//         setUser: (state, action) => {
-//             state.userInfo = action.payload
-//             Cookies.set('userInfo', JSON.stringify(action.payload), { expires: 1 })
-//         },
-//         clearUser: (state) => {
-//             state.userInfo = null
-//             Cookies.remove('userInfo')
-//         }
-//     }
-// })
+const userSlice = createSlice({
+    name: 'user',
+    initialState,
+    reducers: {
+        setUser: (state, action) => {
+            state.userInfo = action.payload
+            localStorage.setItem('userInfo', JSON.stringify(action.payload))
+        },
+        clearUser: (state) => {
+            state.userInfo = null
+            localStorage.removeItem('userInfo')
+        },
+    }
+})
 
-// export const { setUser, clearUser } = userSlice.actions;
-// export default userSlice.reducer
+export const { setUser, clearUser } = userSlice.actions;
+export default userSlice.reducer
