@@ -4,7 +4,7 @@ import { io, Socket } from 'socket.io-client';
 let socket: Socket;
 
 export const initSocket = () => {
-  socket =  io('https://taskify-backend-qpae.onrender.com', { transports: ['websocket'] });
+  socket =  io('ws://taskify-backend-qpae.onrender.com', { transports: ['websocket'] });
 };
 
 export const getSocket = (): Socket => {
