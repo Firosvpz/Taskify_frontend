@@ -165,6 +165,14 @@ const Dashboard: React.FC = () => {
         initSocket();
         const socket = getSocket();
 
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            const parsedUser = JSON.parse(storedUser);
+            console.log('parsedUser', parsedUser);
+
+            socket.emit('join', parsedUser.id);
+        }
+
         socket.on('taskCreated', (newTask: ITask) => {
             setTasks((prev) => [...prev, newTask]);
         });
@@ -174,7 +182,7 @@ const Dashboard: React.FC = () => {
                 prev.map((task) => (task._id === updatedTask._id ? updatedTask : task))
             );
         });
-        
+
         socket.on('taskDeleted', (taskId: string) => {
             setTasks((prev) =>
                 prev.filter((task) => task._id !== taskId)
@@ -413,11 +421,11 @@ const Dashboard: React.FC = () => {
                                         isInvalid={!!errors.title}
                                     />
                                     <StyledButton type="submit" variant="primary" disabled={loading}>
-                                        
+
                                         {loading ? <FaSpinner className="fa-spin" /> : <><FaPlus /> Add Task</>}
                                     </StyledButton>
                                 </StyledInputGroup>
-                                {errors.title && <Form.Text  className="text-danger">{errors.title.message}</Form.Text>}
+                                {errors.title && <Form.Text className="text-danger">{errors.title.message}</Form.Text>}
                             </StyledForm>
 
                             <Row className="mt-4">
@@ -452,13 +460,13 @@ const Dashboard: React.FC = () => {
                                     <p className="text-center text-muted mt-4">No tasks found.</p>
                                 ) : (
                                     filteredTasks.map((task) => (
-                                        <TaskItem 
-                                            key={task._id} 
+                                        <TaskItem
+                                            key={task._id}
                                             className="d-flex justify-content-between align-items-center p-3"
                                         >
                                             <div className="d-flex align-items-center">
-                                                {task.status === "completed" ? 
-                                                    <FaCheckCircle className="text-success me-2" /> : 
+                                                {task.status === "completed" ?
+                                                    <FaCheckCircle className="text-success me-2" /> :
                                                     <FaClock className="text-warning me-2" />
                                                 }
                                                 <span className={task.status === "completed" ? "text-decoration-line-through" : ""}>
@@ -466,27 +474,27 @@ const Dashboard: React.FC = () => {
                                                 </span>
                                             </div>
                                             <div>
-                                                <StyledBadge 
+                                                <StyledBadge
                                                     bg={task.status === "completed" ? "success" : "warning"}
                                                     className="me-2"
                                                 >
                                                     {task.status}
                                                 </StyledBadge>
                                                 {task.status !== "completed" && (
-                                                    <StyledButton 
-                                                        variant="outline-success" 
-                                                        size="sm" 
-                                                        className="me-2" 
+                                                    <StyledButton
+                                                        variant="outline-success"
+                                                        size="sm"
+                                                        className="me-2"
                                                         onClick={() => handleCompleteTask(task)}
                                                         disabled={loading}
                                                     >
                                                         <FaCheck />
                                                     </StyledButton>
                                                 )}
-                                                <StyledButton 
-                                                    variant="outline-primary" 
-                                                    size="sm" 
-                                                    className="me-2" 
+                                                <StyledButton
+                                                    variant="outline-primary"
+                                                    size="sm"
+                                                    className="me-2"
                                                     onClick={() => handleEditTask(task)}
                                                     disabled={task.status === "completed"}
                                                 >
