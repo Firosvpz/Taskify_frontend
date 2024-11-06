@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const Api = axios.create({
-    baseURL:"https://taskify-backend-a9yp.onrender.com",
+    baseURL:"https://taskify-backend-qpae.onrender.com",
     withCredentials:true
 })
 
