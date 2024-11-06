@@ -12,6 +12,12 @@ import { useDispatch } from "react-redux";
 import { clearUser } from "../redux/slice/authSlice";
 import { disconnectSocket, getSocket, initSocket } from "../api/socket";
 
+interface IUser {
+    username: string;
+    email: string;
+    _id: string;
+  }
+
 interface ITask {
     _id: string;
     title: string;
@@ -150,6 +156,7 @@ const Dashboard: React.FC = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const [currentTask, setCurrentTask] = useState<ITask | null>(null);
+    const [user, setUser] = useState<IUser | null>(null);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -166,10 +173,12 @@ const Dashboard: React.FC = () => {
         const socket = getSocket();
 
         const storedUser = localStorage.getItem('user');
+        console.log('stored',storedUser);
+        
         if (storedUser) {
             const parsedUser = JSON.parse(storedUser);
             console.log('parsedUser', parsedUser);
-
+            setUser(parsedUser);
             socket.emit('join', parsedUser.id);
         }
 
@@ -357,6 +366,9 @@ const Dashboard: React.FC = () => {
             <LogoutButton variant="outline-danger" onClick={() => setShowLogoutModal(true)}>
                 <FaSignOutAlt /> Logout
             </LogoutButton>
+            <span style={{ color: "#8B6930", fontWeight: "500" }}>
+                {user?.username}
+              </span>
             <Row className="justify-content-center">
                 <Col xs={12} md={10} lg={8}>
                     <StyledCard>

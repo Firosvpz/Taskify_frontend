@@ -1,10 +1,10 @@
 import { io, Socket } from 'socket.io-client'; 
 
-const SOCKET_URL = 'https://taskify-backend-qpae.onrender.com';
+// const SOCKET_URL = 'http://localhost:5000"';
 let socket: Socket;
 
 export const initSocket = () => {
-  socket = io(SOCKET_URL);
+  socket =  io('https://taskify-backend-qpae.onrender.com', { transports: ['websocket'] });
 };
 
 export const getSocket = (): Socket => {

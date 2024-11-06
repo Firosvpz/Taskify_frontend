@@ -37,6 +37,7 @@ const LoginForm: React.FC = () => {
             if (response.success) {
                 toast.success(response.message);
                 dispatch(setUser(response.token));
+                localStorage.setItem('user', JSON.stringify(response.user));
                 navigate('/dashboard');
             } else {
                 showError(response.message || "Login Error");
