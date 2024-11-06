@@ -165,7 +165,7 @@ const Dashboard: React.FC = () => {
         initSocket();
         const socket = getSocket();
 
-        const storedUser = localStorage.getItem('user');
+        const storedUser = localStorage.getItem('userInfo');
         if (storedUser) {
             const parsedUser = JSON.parse(storedUser);
             console.log('parsedUser', parsedUser);
