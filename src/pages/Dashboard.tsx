@@ -176,8 +176,6 @@ const Dashboard: React.FC = () => {
         const storedUser = localStorage.getItem('user');
         console.log('stored',storedUser);
         
-        const storedUser = localStorage.getItem('userInfo');
-
         if (storedUser) {
             const parsedUser = JSON.parse(storedUser);
             console.log('parsedUser', parsedUser);
