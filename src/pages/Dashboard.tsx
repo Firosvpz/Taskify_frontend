@@ -172,13 +172,12 @@ const Dashboard: React.FC = () => {
         initSocket();
         const socket = getSocket();
 
-<<<<<<< HEAD
+
         const storedUser = localStorage.getItem('user');
         console.log('stored',storedUser);
         
-=======
         const storedUser = localStorage.getItem('userInfo');
->>>>>>> dca5d1a88a02f734c82c267f936836a758965bb4
+
         if (storedUser) {
             const parsedUser = JSON.parse(storedUser);
             console.log('parsedUser', parsedUser);
