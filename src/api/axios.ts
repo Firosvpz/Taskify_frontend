@@ -4,8 +4,7 @@ const Api = axios.create({
     baseURL:"https://taskify-backend-qpae.onrender.com",
     headers: {
       'Content-Type': 'application/json',
-    },
-    withCredentials: true,
+    }
 
 })
 
