@@ -166,7 +166,6 @@ const Dashboard: React.FC = () => {
         initSocket();
         const socket = getSocket();
 
-       
 
         socket.on('taskCreated', (newTask: ITask) => {
             setTasks((prev) => [...prev, newTask]);
