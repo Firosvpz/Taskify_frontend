@@ -1,6 +1,6 @@
 import { io, Socket } from 'socket.io-client'; 
 
-const SOCKET_URL = 'https://task-management-backend-bu1a.onrender.com';
+const SOCKET_URL = 'https://taskify-backend-qpae.onrender.com';
 let socket: Socket;
 
 export const initSocket = () => {
