@@ -1,4 +1,4 @@
-import { Routes,Route } from "react-router-dom"
+import { BrowserRouter as Router,Routes,Route } from "react-router-dom"
 import { Toaster } from 'react-hot-toast';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Register from "./pages/Register";
@@ -12,6 +12,7 @@ function App() {
   return (
     <>
      <Toaster position="top-center" reverseOrder={false} />
+     <Router>
    <Routes>
    <Route element={<PublicUserProtectedRoute />}>
     <Route path="/" element={<Register/>}/>
@@ -21,6 +22,7 @@ function App() {
     <Route path="/dashboard" element={<Dashboard/>}/>
     </Route>
    </Routes>
+   </Router>
     </>
   )
 }
