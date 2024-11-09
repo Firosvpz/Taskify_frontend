@@ -2,6 +2,7 @@ import axios from "axios";
 
 const Api = axios.create({
     baseURL:"https://taskify-backend-qpae.onrender.com",
+      withCredentials:true
 })
 
 Api.interceptors.request.use(
