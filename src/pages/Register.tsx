@@ -1,10 +1,7 @@
 import RegisterForm from "../components/SignUpForm";
 
 const Register: React.FC = () => {
-   
-    return(
-        <RegisterForm/>
-    )
-}
+  return <RegisterForm />;
+};
 
-export default Register
+export default Register;

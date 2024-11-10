@@ -1,10 +1,13 @@
 import { Routes, Route } from "react-router-dom";
-import { Toaster } from 'react-hot-toast';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Toaster } from "react-hot-toast";
+import "bootstrap/dist/css/bootstrap.min.css";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import { PublicUserProtectedRoute, UserProtectedRoute } from "./components/ProtectedRoute";
+import {
+  PublicUserProtectedRoute,
+  UserProtectedRoute,
+} from "./components/ProtectedRoute";
 
 function App() {
   return (
