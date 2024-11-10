@@ -1,6 +1,6 @@
-import { io, Socket } from 'socket.io-client'; 
+import { io, Socket } from "socket.io-client";
 
-const SOCKET_URL = 'https://taskify-backend-qpae.onrender.com';
+const SOCKET_URL = "http://localhost:5000";
 let socket: Socket;
 
 export const initSocket = () => {
@@ -9,7 +9,7 @@ export const initSocket = () => {
 
 export const getSocket = (): Socket => {
   if (!socket) {
-    throw new Error('Socket not initialized. Call initSocket() first.');
+    throw new Error("Socket not initialized. Call initSocket() first.");
   }
   return socket;
 };
@@ -19,4 +19,3 @@ export const disconnectSocket = () => {
     socket.disconnect();
   }
 };
-
