@@ -1,4 +1,4 @@
-# Task Management Application - Taskly
+# Task Management Application - TaskLY
 
 A full-stack task management application with features like user authentication, real-time updates, and data visualization. This application is built using **Node.js** for the backend, **React** with **Vite** for the frontend, and **MongoDB** as the database. The application is developed using TypeScript for both the frontend and backend, enhancing type safety and code reliability.
 
@@ -30,10 +30,10 @@ A full-stack task management application with features like user authentication,
 #### Clone the Repository
 
 ```bash
-frontend:-git clone https://github.com/fasinafarook/TaskNest-frontend.git
+frontend:-git clone https://github.com/Firosvpz/Taskify_frontend.git
 cd frontend
 
-backend:-https://github.com/fasinafarook/TaskNest-backend
+backend:-git https://github.com/Firosvpz/Taskify_backend.git
 cd backend
 ```
 
@@ -91,7 +91,7 @@ cd backend
 
 ### Accessing the Application
 
-- **Frontend**: [https://task-nest-nine.vercel.app/](https://task-nest-nine.vercel.app/)
+- **Frontend**: [https://taskify-frontend-nine.vercel.app](https://taskify-frontend-nine.vercel.app)
 - **Backend**: Deployed on Render
 
 ## Deployment
