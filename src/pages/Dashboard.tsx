@@ -17,6 +17,7 @@ import {
   updateTasks,
   deleteTasks,
   completeTasks,
+  searchTask
 } from "../api/taskApi";
 import {
   FaPlus,
@@ -189,6 +190,7 @@ const Dashboard: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [currentTask, setCurrentTask] = useState<ITask | null>(null);
+  
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -201,8 +203,17 @@ const Dashboard: React.FC = () => {
   } = useForm<ITask>({ mode: "onChange" });
 
   useEffect(() => {
-    initSocket();
+    const token = localStorage.getItem('userToken')as string
+    initSocket(token);
     const socket = getSocket();
+
+    const storedUser = localStorage.getItem('userInfo');
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      console.log('parsedUser',parsedUser);
+      
+      socket.emit('join', parsedUser.id);
+  }
 
     socket.on("taskCreated", (newTask: ITask) => {
       setTasks((prev) => [...prev, newTask]);
@@ -244,6 +255,21 @@ const Dashboard: React.FC = () => {
     } catch (error) {
       console.error("Failed to fetch tasks:", error);
       toast.error("Failed to fetch tasks. Please try again.");
+    }
+  };
+
+  const handleSearch = async () => {
+    if (!search.trim()) {
+      fetchTasks(); // Load all tasks if the search query is empty
+      return;
+    }
+
+    try {
+      const searchResults = await searchTask(search);
+      setTasks(searchResults.tasks);
+    } catch (error) {
+      console.error("Error searching tasks:", error);
+      toast.error("Failed to search tasks. Please try again.");
     }
   };
 
@@ -499,6 +525,7 @@ const Dashboard: React.FC = () => {
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                     />
+                      <Button variant="primary" onClick={handleSearch}></Button>
                   </StyledInputGroup>
                 </Col>
                 <Col sm={6}>
